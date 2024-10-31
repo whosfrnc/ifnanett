@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Perfil - DrawAttack</title>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            background-color: #ffffff;
+            height: 100vh;
+            position: fixed; /* Fixa a sidebar */
+            top: 0; /* Começa do topo */
+            left: 0; /* Alinha à esquerda */
+            width: 200px; /* Largura fixa da sidebar */
+            padding: 20px; /* Espaçamento interno */
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar a {
+            color: #658459;
+            padding: 10px 0;
+            display: block;
+            text-decoration: none;
+            margin: 10px 0;
+        }
+        .sidebar a:hover {
+            background-color: #76a06a;
+            color: #fff;
+        }
+        .perfil-container {
+            margin-left: 220px; /* Espaço para a sidebar */
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .foto-perfil {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+        .btn-editar {
+            margin-top: 20px;
+        }
+        .btn-delete {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    {% load static %}
+    
+    <!-- Menu lateral -->
+    <div class="sidebar">
+        <span class="navbar-brand mb-0 h1">DrawAtack</span>
+        <a href="{% url 'postar' %}">Postar</a>
+        <a href="{% url 'suporte' %}">Suporte</a>
+        <a href="{% url 'index' %}">Página Inicial</a>
+        
+        <!-- Verificar se o usuário é administrador (is_staff) -->
+        {% if request.user.is_staff %}
+            <a href="{% url 'admin_dashboard' %}">Administração</a>
+        {% endif %}
+
+        <!-- Links para login/logout -->
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+    </div>
+
+    <div class="container perfil-container">
+        <h1>Meu Perfil</h1>
+        <div class="text-center">
+            {% if user.foto_perfil %}
+                <img src="{{ user.foto_perfil.url }}" alt="Foto de Perfil" class="foto-perfil">
+            {% else %}
+                <img src="{% static 'images/default_profile.png' %}" alt="Foto de Perfil Padrão" class="foto-perfil">
+            {% endif %}
+        </div>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Nome:</strong> {{ user.nome }}</p>
+        <p><strong>Sobrenome:</strong> {{ user.sobrenome }}</p>
+        <p><strong>Bio:</strong> {{ user.bio }}</p>
+        <p><strong>Sala:</strong> {{ user.room }}</p>
+        <a href="{% url 'editar_perfil' %}" class="btn btn-primary btn-editar">Editar Perfil</a>
+
+        <!-- Botão para apagar conta -->
+        {% if not user.is_staff %}
+        <form action="{% url 'deletar_conta' %}" method="post" onsubmit="return confirm('Tem certeza que deseja apagar sua conta? Esta ação não pode ser desfeita.');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-delete">Apagar Minha Conta</button>
+        </form>
+        {% endif %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
