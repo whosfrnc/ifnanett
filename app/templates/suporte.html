@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suporte</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #d9f9d9; /* Verde bebê */
+            color: #333;
+            padding: 20px;
+        }
+        .sidebar {
+            background-color: #ffffff;
+            height: 100vh;
+            position: fixed; /* Fixa a sidebar */
+            top: 0; /* Começa do topo */
+            left: 0; /* Alinha à esquerda */
+            width: 200px; /* Largura fixa da sidebar */
+            padding: 20px; /* Espaçamento interno */
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar a {
+            color: #658459;
+            padding: 10px 0;
+            display: block;
+            text-decoration: none;
+            margin: 10px 0;
+        }
+        .sidebar a:hover {
+            background-color: #76a06a;
+            color: #fff;
+        }
+        form {
+            max-width: 600px;
+            margin-left: 220px; /* Espaço para a sidebar */
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50; /* Cor do botão */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    {% load static %}
+    
+    <!-- Menu lateral -->
+    <div class="sidebar">
+        <span class="navbar-brand mb-0 h1">DrawAtack</span>
+        <a href="{% url 'perfil' %}">Perfil</a>
+        <a href="{% url 'postar' %}">Postar</a>
+        <a href="{% url 'index' %}">Página Principal</a>
+        
+        <!-- Verificar se o usuário é administrador (is_staff) -->
+        {% if request.user.is_staff %}
+            <a href="{% url 'admin_dashboard' %}">Administração</a>
+        {% endif %}
+
+        <!-- Links para login/logout -->
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+    </div>
+
+    <h2>Enviar Suporte</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="assunto">Assunto:</label>
+        <input type="text" id="assunto" name="assunto" required>
+    
+        <label for="mensagem">Mensagem:</label>
+        <textarea id="mensagem" name="mensagem" required></textarea>
+    
+        <label for="status">Status:</label>
+        <select id="status" name="status">
+            <option value="Aberto">Aberto</option>
+            <option value="Fechado">Fechado</option>
+        </select>
+    
+        <button type="submit">Enviar</button>
+    </form>
+    
+</body>
+</html>
