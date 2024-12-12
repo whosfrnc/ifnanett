@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Postar Desenho</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css"> <!-- Link para o CSS -->
+    <style>
+        /* Reset de margens e paddings */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Estilo do corpo */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ebd6d0; /* Verde bebê suave */
+            color: #333;
+        }
+
+        /* Menu lateral */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: linear-gradient(180deg, #e61313, #bd0d0d);
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            color: #ffffff;
+            font-size: 18px;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ffffff;
+            padding: 12px 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        /* Container principal */
+        .container {
+            background-color: #f0afaf; /* Verde bebê mais claro */
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 700px;
+            height: 500px;
+            margin-left: 620px; /* Espaçamento à esquerda para a sidebar */
+            margin-top: 100px; /* Espaçamento superior */
+            display: flex;
+            flex-direction: column; /* Alinha os itens em coluna */
+            align-items: center; /* Centraliza os itens */
+        }
+
+        /* Título da página */
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #f10a0a; /* Verde mais escuro */
+        }
+
+        /* Estilo do formulário */
+        .form-group {
+            margin-bottom: 15px;
+            width: 100%; /* Para o formulário ocupar toda a largura */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #f54d4d; /* Verde mais escuro */
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="text"]:focus,
+        input[type="file"]:focus {
+            border-color: #f3f3f3; /* Verde mais escuro */
+        }
+
+        /* Botão de envio */
+        .btn {
+            background-color: #f32525; /* Verde */
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin: 20px;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: #f87e75; /* Verde escuro ao passar o mouse */
+        }
+
+        /* Botão voltar */
+        .btn-voltar {
+            background-color: #e57373; /* Vermelho claro */
+            margin-top: 10px;
+            width: auto; /* Largura automática */
+        }
+
+        /* Estilo do rodapé */
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #666;
+        }
+
+    </style>
+</head>
+<body>
+    {% load static %}
+
+    <!-- Menu lateral -->
+    <div class="sidebar">
+        <h2>IFnaNet</h2>
+        <a href="{% url 'index' %}"><i class="fas fa-pencil-alt"></i> Página Principal</a>
+        <a href="{% url 'suporte' %}"><i class="fas fa-headset"></i> Suporte</a>
+        <a href="{% url 'perfil' %}"><i class="fas fa-user"></i> Perfil</a>
+        <a href="{% url 'agenda' %}"><i class="fas fa-calendar"></i> Agenda</a>
+        {% if request.user.is_staff %}
+            <a href="{% url 'admin_dashboard' %}"><i class="fas fa-tools"></i> Administração</a>
+        {% endif %}
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        {% else %}
+            <a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
+        {% endif %}
+    </div>
+
+    <div class="container">
+        <h1>Postar seu Desenho</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="titulo" class="form-label">Título</label>
+                <input type="text" class="form-control" id="titulo" name="titulo" required>
+            </div>
+            <div class="mb-3">
+                <label for="imagem" class="form-label">Imagem (opcional)</label>
+                <input type="file" class="form-control" id="imagem" name="imagem" accept="image/*">
+            </div>
+            <button type="submit" class="btn btn-success">Publicar</button>
+            <a href="{% url 'index' %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+        <div class="footer">
+            <p>Desenvolvido por Franco</p>
+        </div>
+    </div>
+</body>
+</html>

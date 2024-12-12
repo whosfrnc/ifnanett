@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Carregando a tag static -->
+    {% load static %}
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            margin-top: 50px;
+            max-width: 800px;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+
+        .foto-perfil {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 20px;
+            border: 5px solid #ddd;
+            transition: all 0.3s ease;
+        }
+
+        .foto-perfil:hover {
+            transform: scale(1.1);
+            border-color: #ff6347;
+        }
+
+        .info-perfil {
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+
+        .btn-voltar {
+            margin-top: 20px;
+            display: block;
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-voltar:hover {
+            background-color: #45a049;
+        }
+
+        .row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .col-md-3, .col-md-9 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .col-md-3 {
+            margin-bottom: 20px;
+        }
+
+        .col-md-9 {
+            flex-direction: column;
+        }
+    </style>
+    <title>Perfil</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Perfil de {{ usuario.nome }} {{ usuario.sobrenome }}</h1>
+        <div class="row">
+            <div class="col-md-3">
+                {% if usuario.foto_perfil %}
+                    <img src="{{ usuario.foto_perfil.url }}" alt="Foto de perfil" class="foto-perfil">
+                {% else %}
+                    <img src="{% static 'default_profile.png' %}" alt="Foto de perfil" class="foto-perfil">
+                {% endif %}
+            </div>
+            <div class="col-md-9">
+                <div class="info-perfil">
+                    <p><strong>Nome:</strong> {{ usuario.nome }} {{ usuario.sobrenome }}</p>
+                    <p><strong>Email:</strong> {{ usuario.email }}</p>
+                    <p><strong>Bio:</strong> {{ usuario.bio }}</p>
+                    <p><strong>Sala:</strong> {{ usuario.room }}</p>
+                </div>
+            </div>
+        </div>
+        <a href="{% url 'index' %}">
+            <button class="btn-voltar">Voltar para a Página Principal</button>
+        </a>
+    </div>
+</body>
+</html>
